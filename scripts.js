@@ -3,7 +3,6 @@
 
 $(document).ready(function(){
 	zipLookup();
-	streetNames
 
 	$('#streetNames').change(function(){
 		geoLookup("address");
@@ -36,9 +35,7 @@ function geoLookup(lookup) {
 	data['$$app_token'] = 'sKRqN6YI4Yd3g612t1P8PhqLt';
 	data['incident_zip'] = zip;
 
-	if (lookup == "streetName") {
-	    ajaxCall(data, lookup);
-	} else if (lookup == "address") {
+	if (lookup == "address") {
 		var streetName = $('#streetNames option:selected').text();
 		data['street_name'] = streetName;		
 	}
@@ -48,7 +45,7 @@ function geoLookup(lookup) {
 function ajaxCall(data, lookup) {
 	$.ajax({
 		type: 'GET',
-		url: 'https://data.cityofnewyork.us/resource/erm2-nwe9.json',
+		url: "https://data.cityofnewyork.us/resource/erm2-nwe9.json?$where=(created_date>'2011-01-01')",
 		data: data,
 		success: function(jsonData) {
 			if (lookup == "streetName") {
@@ -63,23 +60,23 @@ function ajaxCall(data, lookup) {
 	});
 }
 
-
 function streetNameLookup(jsonData) {
 	$.each(jsonData, function(x) {
 		var incident = jsonData[x];
-
 		if (incident['address_type'] == 'ADDRESS') {
-			$("#streetNames").append("<option value='" + incident['street_name'] + "'>" + incident['street_name'] + "</option>");
-		}
-		else {
-			$("#streetNames").append("<option>" + incident['address_type'] + "</option>");
-		}
-	});
+				$("#streetNames").append("<option value='" + incident['street_name'] + "'>" + incident['street_name'] + "</option>");
+			}
+			else {
+				$("#streetNames").append("<option>" + incident['address_type'] + "</option>");
+			}
+		});
 	removeDuplicates('streetNames');
 	sortDropdown('streetNames', 'Street');
 }
 
 function addressLookup(jsonData) {
+	$('#addresses').empty();
+	$('#addresses').prepend("<option value=''>Address</option>");
 	$.each(jsonData, function(x) {
 		var incident = jsonData[x];
 		$("#addresses").append("<option value='" + incident['incident_address'] + "'>" + incident['incident_address'] + "</option>");
@@ -202,11 +199,29 @@ function initMap(latLookup, lngLookup) {
 	var myLatLng = new google.maps.LatLng(latLookup, lngLookup);
 
 	var mapOptions = {
-		zoom: 15,
+		zoom: 18,
 		center: myLatLng
 	}
 
+	var styleArray = [
+		{
+		    featureType: "all",
+		    elementType: "labels",
+		    stylers: [
+		      { visibility: "off" }
+		    ]
+		},
+		{
+		    featureType: "road",
+		    elementType: "labels",
+		    stylers: [
+		      { visibility: "on" }
+		    ]
+		}
+	]
 	var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+	map.setOptions({styles: styleArray});
 
 	var marker = new google.maps.Marker({
     	position: myLatLng,
