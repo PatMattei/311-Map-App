@@ -3,3 +3,10 @@
 	max-height: 300px;
 	overflow: auto;
 }
+
+#map {
+	display: block;
+}
+#complaintType {
+	display: block;
+}

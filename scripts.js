@@ -26,6 +26,8 @@ function clearDropdowns() {
 	$('#streetNames').prepend("<option value=''>Street</option>");
 	$('#addresses').empty();
 	$('#addresses').prepend("<option value=''>Address</option>");
+	$('#complaintTypes').empty();
+	$('#complaintTypes').prepend("<option value=''>Complaint Types</option>");
 }
 
 function geoLookup(lookup) {
@@ -127,6 +129,7 @@ function displayDetails(sortedKeys, jsonData) {
 			if (jsonData[x]['unique_key'] == sortedKey) {
 				var incident = jsonData[x];
 				populateResults(incident['incident_address'], incident['agency_name'], new Date(incident['created_date']), new Date(incident['closed_date']), incident['complaint_type'], incident['descriptor'], incident['unique_key'], incident['resolution_description']);
+				populateComplaintTypes(incident['complaint_type']);
 			}
 		});
 	});
@@ -142,6 +145,11 @@ function populateResults(incident_address, agency_name, created_date, closed_dat
 	$("#details").append("resolution_description: " + resolution_description + ",<br>");
 	$("#details").append("complaint_type: " + complaint_type + ",<br>");
 	$("#details").append("unique_key: " + unique_key + "<hr>");
+}
+
+function populateComplaintTypes(complaint_type){
+	$("#complaintTypes").show();
+	$("#complaintTypes").append("<option value='" + complaint_type + "'>" + complaint_type + "</option>");
 }
 
 
@@ -160,9 +168,6 @@ function sortData(jsonData) {
 function compareDates(a, b) {
     return new Date(a.date).getTime() - new Date(b.date).getTime();
 }
-
-
-
 
 function removeDuplicates(field) {
 	var dropdown = "#" + field;
