@@ -1,14 +1,11 @@
 //Data: https://nycopendata.socrata.com/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9
 //API docs: http://dev.socrata.com/foundry/#/data.cityofnewyork.us/erm2-nwe9
 
-$(document).ready(function(){
-	zipLookup();
 
-	$('#streetNames').change(function(){
-		geoLookup("address");
-	});
-});
-
+//TODOS
+//Alphabetize dropdowns
+//Complaint type filters
+//Convert times
 function zipLookup() {
 	$("#zip").keyup(function() {
 		var zipLength = $('#zip').val().length;
@@ -242,3 +239,13 @@ function displayMap() {
 	$('#map').css('height', '500px');
 	$('#map').show();
 }
+
+$(document).ready(function(){
+	zipLookup();
+
+	$('#streetNames').change(function(){
+		geoLookup("address");
+	});
+});
+
+$('#geoLookup').on('click', incidentLookup);
