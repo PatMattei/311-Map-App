@@ -19,11 +19,9 @@ function zipLookup() {
 }
 
 function clearDropdowns() {
-	$('#streetNames').empty();
+	$('#streetNames, #addresses, #complaintTypes').empty();
 	$('#streetNames').prepend("<option value=''>Street</option>");
-	$('#addresses').empty();
 	$('#addresses').prepend("<option value=''>Address</option>");
-	$('#complaintTypes').empty();
 	$('#complaintTypes').prepend("<option value=''>Complaint Types</option>");
 }
 
@@ -63,12 +61,12 @@ function streetNameLookup(jsonData) {
 	$.each(jsonData, function(x) {
 		var incident = jsonData[x];
 		if (incident['address_type'] == 'ADDRESS') {
-				$("#streetNames").append("<option value='" + incident['street_name'] + "'>" + incident['street_name'] + "</option>");
-			}
-			else {
-				$("#streetNames").append("<option>" + incident['address_type'] + "</option>");
-			}
-		});
+			$("#streetNames").append("<option value='" + incident['street_name'] + "'>" + incident['street_name'] + "</option>");
+		}
+		else {
+			$("#streetNames").append("<option>" + incident['address_type'] + "</option>");
+		}
+	});
 	removeDuplicates('streetNames');
 	sortDropdown('streetNames', 'Street');
 }
@@ -102,7 +100,7 @@ function incidentLookup() {
 			'incident_zip': zip,
 			'street_name': streetName,
 			'incident_address': address
-	    },
+		},
 		success: function(jsonData) {
 			var latLookup = jsonData[0]['location']['latitude'];
 			var lngLookup = jsonData[0]['location']['longitude'];
@@ -155,7 +153,7 @@ function sortData(jsonData) {
 	unsortedData = [];
 	$.each(jsonData, function(i) {
 		var sortedKey = jsonData[i];
-   		unsortedData.push({"id": sortedKey['unique_key'], "date": new Date(sortedKey['created_date'])});
+		unsortedData.push({"id": sortedKey['unique_key'], "date": new Date(sortedKey['created_date'])});
 	});
 	var sortedData = unsortedData.sort(compareDates);
 	//Return newest create_date data first
@@ -163,7 +161,7 @@ function sortData(jsonData) {
 }
 
 function compareDates(a, b) {
-    return new Date(a.date).getTime() - new Date(b.date).getTime();
+	return new Date(a.date).getTime() - new Date(b.date).getTime();
 }
 
 function removeDuplicates(field) {
@@ -171,11 +169,11 @@ function removeDuplicates(field) {
 	var usedNames = {};
 
 	$(dropdown + " > option").each(function () {
-	    if (usedNames[this.text]) {
-	        $(this).remove();
-	    } else {
-	        usedNames[this.text] = this.value;
-	    }
+		if (usedNames[this.text]) {
+			$(this).remove();
+		} else {
+			usedNames[this.text] = this.value;
+		}
 	});
 }
 
@@ -188,9 +186,15 @@ function sortDropdown(field, display) {
 		$(this).val(newValue);
 	});
 
-	$(dropdown).html($(dropdown + " > option").sort(function (a, b) {
-		return a.value == b.value ? 0 : a.value < b.value ? -1 : 1
+	$(dropdown).html($(dropdown + " > option").sort(function (a, b) { //alphabetize list
+		return a.value == b.value ? 0 : a.value < b.value ? -1 : 1 
 	}));
+	$(dropdown).html($(dropdown + " > option").sort(function (a, b) { //sort list numerically
+		var keyA = parseInt($(a).text(), 10);
+		var keyB = parseInt($(b).text(), 10);
+		return keyA - keyB;
+	}));
+	
 	$(dropdown + " > option[value=''").remove();
 	$(dropdown).prepend("<option value=''>" + display + "</option>");
 	$(dropdown)[0].options[0].selected = true;
@@ -206,34 +210,33 @@ function initMap(latLookup, lngLookup) {
 	}
 
 	var styleArray = [
-		{
-		    featureType: "all",
-		    elementType: "labels",
-		    stylers: [
-		      { visibility: "off" }
-		    ]
-		},
-		{
-		    featureType: "road",
-		    elementType: "labels",
-		    stylers: [
-		      { visibility: "on" }
-		    ]
-		}
+	{
+		featureType: "all",
+		elementType: "labels",
+		stylers: [
+		{ visibility: "off" }
+		]
+	}, {
+		featureType: "road",
+		elementType: "labels",
+		stylers: [
+		{ visibility: "on" }
+		]
+	}
 	]
 	var map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
 	map.setOptions({styles: styleArray});
 
 	var marker = new google.maps.Marker({
-    	position: myLatLng,
-    	title:"Hello World!",
-    	icon: ""
+		position: myLatLng,
+		title:"Hello World!",
+		icon: ""
 	});
 
 	// To add the marker to the map, call setMap();
 	marker.setMap(map);
- }
+}
 
 function displayMap() {
 	$('#map').css('height', '500px');
