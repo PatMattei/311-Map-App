@@ -3,7 +3,6 @@
 
 
 //TODOS
-//Alphabetize dropdowns
 //Complaint type filters
 //Convert times
 function zipLookup() {
@@ -19,10 +18,10 @@ function zipLookup() {
 }
 
 function clearDropdowns() {
-	$('#streetNames, #addresses, #complaintTypes').empty();
+	$('#streetNames, #addresses, #complaintType').empty();
 	$('#streetNames').prepend("<option value=''>Street</option>");
 	$('#addresses').prepend("<option value=''>Address</option>");
-	$('#complaintTypes').prepend("<option value=''>Complaint Types</option>");
+	$('#complaintType').prepend("<option value=''>Complaint Types</option>");
 }
 
 function geoLookup(lookup) {
@@ -118,16 +117,22 @@ function incidentLookup() {
 
 
 function displayDetails(sortedKeys, jsonData) {
+	var complaintTypes = [];
+
 	$.each(sortedKeys, function(i) {
 		var sortedKey = sortedKeys[i]['id'];
 		$.each(jsonData, function(x) {
 			if (jsonData[x]['unique_key'] == sortedKey) {
 				var incident = jsonData[x];
 				populateResults(incident['incident_address'], incident['agency_name'], new Date(incident['created_date']), new Date(incident['closed_date']), incident['complaint_type'], incident['descriptor'], incident['unique_key'], incident['resolution_description']);
-				populateComplaintTypes(incident['complaint_type']);
+
+				if (jQuery.inArray(incident['complaint_type'], complaintTypes) === -1 ) {
+					complaintTypes.push(incident['complaint_type']);
+				}
 			}
 		});
 	});
+	populateComplaintTypes(complaintTypes);
 }
 
 
@@ -142,9 +147,12 @@ function populateResults(incident_address, agency_name, created_date, closed_dat
 	$("#details").append("unique_key: " + unique_key + "<hr>");
 }
 
-function populateComplaintTypes(complaint_type){
-	$("#complaintTypes").show();
-	$("#complaintTypes").append("<option value='" + complaint_type + "'>" + complaint_type + "</option>");
+function populateComplaintTypes(complaintTypes) {
+	$.each(complaintTypes, function(i) {
+		console.log(complaintTypes[i])
+		$("#complaintType").append("<option value='" + complaintTypes[i] + "'>" + complaintTypes[i] + "</option>");
+	});
+	$("#complaintType").show();
 }
 
 
