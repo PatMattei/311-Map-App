@@ -3,7 +3,9 @@
 
 
 //TODOS
-//Complaint type filters
+//Refactor AJAX calls
+//Set up test button
+//Add container elements to details
 //Convert times
 function resetForm() {
 	$('select').empty();
@@ -26,7 +28,7 @@ function geoLookup(lookup) {
 	populateAddress (data, lookup);
 }
 
-function populateAddress (data, lookup) {
+function populateAddress(data, lookup) {
 	$.ajax({
 		type: 'GET',
 		url: "https://data.cityofnewyork.us/resource/erm2-nwe9.json?$where=(created_date>'2011-01-01')",
@@ -72,11 +74,12 @@ function addressLookup(jsonData) {
 
 
 function incidentLookup() {
-	$('#map').empty();
-	$('#details').empty();
 	var zip = $('#zip').val();
 	var streetName = $('#streetNames').val();
 	var address = $('#addresses option:selected').text();
+
+	$('#map').empty();
+	$('#details').empty();
 
 	$.ajax({
 		type: 'GET',
@@ -103,23 +106,13 @@ function incidentLookup() {
 	});
 }
 
-function filterByComplaintTypes() {
+function filterByComplaintTypes(data) {
 	$('#details').empty();
-	var zip = $('#zip').val();
-	var streetName = $('#streetNames').val();
-	var address = $('#addresses option:selected').text();
-	var complaintType = $('#complaintType').val();
 
 	$.ajax({
 		type: 'GET',
 		url: 'https://data.cityofnewyork.us/resource/erm2-nwe9.json',
-		data: {
-			'$$app_token': 'sKRqN6YI4Yd3g612t1P8PhqLt',
-			'incident_zip': zip,
-			'street_name': streetName,
-			'incident_address': address,
-			'complaint_type': complaintType
-		},
+		data: data,
 		success: function(jsonData) {
 			var sortedKeys = sortData(jsonData);
 			displayDetails(sortedKeys, jsonData);
@@ -285,4 +278,14 @@ $('#streetNames').on('change', function(){
 
 $('#geoLookup').on('click', incidentLookup);
 
-$('#complaintType').on('change', filterByComplaintTypes);
+$('#complaintType').on('change', function() {
+	var data = {
+		'$$app_token': 'sKRqN6YI4Yd3g612t1P8PhqLt',
+		'incident_zip': $('#zip').val(),
+		'street_name': $('#streetNames').val(),
+		'incident_address': $('#addresses option:selected').text(),
+		'complaint_type': $('#complaintType').val()
+	}
+
+	filterByComplaintTypes(data)
+});
