@@ -5,20 +5,8 @@
 //TODOS
 //Complaint type filters
 //Convert times
-function zipLookup() {
-	$("#zip").keyup(function() {
-		var zipLength = $('#zip').val().length;
-		if (zipLength == 5) {
-			geoLookup("streetName");
-		}
-		else {
-			clearDropdowns();
-		}
-	});
-}
-
-function clearDropdowns() {
-	$('#streetNames, #addresses, #complaintType').empty();
+function resetForm() {
+	$('select').empty();
 	$('#streetNames').prepend("<option value=''>Street</option>");
 	$('#addresses').prepend("<option value=''>Address</option>");
 	$('#complaintType').prepend("<option value=''>Complaint Types</option>");
@@ -35,10 +23,10 @@ function geoLookup(lookup) {
 		var streetName = $('#streetNames option:selected').text();
 		data['street_name'] = streetName;		
 	}
-	ajaxCall(data, lookup);
+	populateAddress (data, lookup);
 }
 
-function ajaxCall(data, lookup) {
+function populateAddress (data, lookup) {
 	$.ajax({
 		type: 'GET',
 		url: "https://data.cityofnewyork.us/resource/erm2-nwe9.json?$where=(created_date>'2011-01-01')",
@@ -106,6 +94,33 @@ function incidentLookup() {
 			displayMap();
 			initMap(latLookup, lngLookup);
 
+			var sortedKeys = sortData(jsonData);
+			displayDetails(sortedKeys, jsonData);
+		},
+		error: function() {
+			alert('Error loading');
+		}
+	});
+}
+
+function filterByComplaintTypes() {
+	$('#details').empty();
+	var zip = $('#zip').val();
+	var streetName = $('#streetNames').val();
+	var address = $('#addresses option:selected').text();
+	var complaintType = $('#complaintType').val();
+
+	$.ajax({
+		type: 'GET',
+		url: 'https://data.cityofnewyork.us/resource/erm2-nwe9.json',
+		data: {
+			'$$app_token': 'sKRqN6YI4Yd3g612t1P8PhqLt',
+			'incident_zip': zip,
+			'street_name': streetName,
+			'incident_address': address,
+			'complaint_type': complaintType
+		},
+		success: function(jsonData) {
 			var sortedKeys = sortData(jsonData);
 			displayDetails(sortedKeys, jsonData);
 		},
@@ -251,12 +266,23 @@ function displayMap() {
 	$('#map').show();
 }
 
-$(document).ready(function(){
-	zipLookup();
+$(document).ready(resetForm);
 
-	$('#streetNames').change(function(){
-		geoLookup("address");
-	});
+
+$("#zip").on('keyup', function() {
+	if ($('#zip').val().length == 5) {
+		geoLookup("streetName");
+	}
+	else {
+		resetForm();
+	}
+});
+
+
+$('#streetNames').on('change', function(){
+	geoLookup("address");
 });
 
 $('#geoLookup').on('click', incidentLookup);
+
+$('#complaintType').on('change', filterByComplaintTypes);
