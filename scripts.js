@@ -4,8 +4,8 @@
 
 
 //TODOS
-//Refactor AJAX calls
 //Set up test button
+//Fix complaint type bug 
 //Add container elements to details
 //Convert times
 function resetForm() {
@@ -90,7 +90,6 @@ function displayDetails(sortedKeys, jsonData) {
 	populateComplaintTypes(complaintTypes);
 }
 
-
 function populateResults(incident_address, agency_name, created_date, closed_date, complaint_type, descriptor, unique_key, resolution_description) {
 	$("#details").append("incident_address: " + incident_address + ",<br>");
 	$("#details").append("agency_name: " + agency_name + ",<br>");
@@ -109,8 +108,6 @@ function populateComplaintTypes(complaintTypes) {
 	});
 	$("#complaintType").show();
 }
-
-
 
 function sortData(jsonData) {
 	unsortedData = [];
@@ -163,7 +160,6 @@ function sortDropdown(field, display) {
 	$(dropdown)[0].options[0].selected = true;
 }
 
-
 function initMap(latLookup, lngLookup) { 
 	var myLatLng = new google.maps.LatLng(latLookup, lngLookup);
 
@@ -206,6 +202,7 @@ function displayMap(latLookup, lngLookup) {
 	initMap(latLookup, lngLookup);
 }
 
+
 $(document).ready(resetForm);
 
 
@@ -218,7 +215,6 @@ $("#zip").on('keyup', function() {
 	}
 });
 
-
 $('#streetNames').on('change', function(){
 	geoLookup("address");
 });
@@ -230,7 +226,6 @@ $('#geoLookup').on('click', function() {
 		'street_name': $('#streetNames').val(),
 		'incident_address': $('#addresses option:selected').text()
 	}
-	var lookup = "incidents";
 	
 	fetchData(data).then(function(result) {
 		var latLookup = result[0]['location']['latitude'];
@@ -251,7 +246,6 @@ $('#complaintType').on('change', function() {
 		'incident_address': $('#addresses option:selected').text(),
 		'complaint_type': $('#complaintType').val()
 	}
-	var lookup = "incidents";
 
 	fetchData(data).then(function(result) {
 		var latLookup = result[0]['location']['latitude'];
