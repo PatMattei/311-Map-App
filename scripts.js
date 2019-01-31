@@ -22,19 +22,27 @@ function geoLookup(lookup) {
 	data['incident_zip'] = zip;
 
 	if (lookup == "address") {
-		var streetName = $('#streetNames option:selected').text();
-		data['street_name'] = streetName;		
+		data['street_name'] = $('#streetNames option:selected').text();
 	}
-	populateAddress (data, lookup);
+	fetchData(data, lookup);
 }
 
-function populateAddress(data, lookup) {
+function fetchData(data, lookup) {
 	$.ajax({
 		type: 'GET',
+		//Refrence: https://data.cityofnewyork.us/resource/erm2-nwe9.json?%24%24app_token=sKRqN6YI4Yd3g612t1P8PhqLt&incident_zip=11105&incident_address=21-67+33+STREET
 		url: "https://data.cityofnewyork.us/resource/erm2-nwe9.json?$where=(created_date>'2011-01-01')",
 		data: data,
 		success: function(jsonData) {
-			if (lookup == "streetName") {
+			if (lookup == "incidents") {
+				var latLookup = jsonData[0]['location']['latitude'];
+				var lngLookup = jsonData[0]['location']['longitude'];
+				displayMap();
+				initMap(latLookup, lngLookup);
+
+				var sortedKeys = sortData(jsonData);
+				displayDetails(sortedKeys, jsonData);
+			} else if (lookup == "streetName") {
 				streetNameLookup(jsonData);
 			} else if (lookup == "address") {
 				addressLookup(jsonData);
@@ -69,32 +77,6 @@ function addressLookup(jsonData) {
 	});
 	removeDuplicates('addresses');
 	sortDropdown('addresses', 'Address');
-}
-
-
-
-function incidentLookup(data) {
-	$('#map').empty();
-	$('#details').empty();
-
-	$.ajax({
-		type: 'GET',
-		//Refrence: https://data.cityofnewyork.us/resource/erm2-nwe9.json?%24%24app_token=sKRqN6YI4Yd3g612t1P8PhqLt&incident_zip=11105&incident_address=21-67+33+STREET
-		url: 'https://data.cityofnewyork.us/resource/erm2-nwe9.json',
-		data: data,
-		success: function(jsonData) {
-			var latLookup = jsonData[0]['location']['latitude'];
-			var lngLookup = jsonData[0]['location']['longitude'];
-			displayMap();
-			initMap(latLookup, lngLookup);
-
-			var sortedKeys = sortData(jsonData);
-			displayDetails(sortedKeys, jsonData);
-		},
-		error: function() {
-			alert('Error loading');
-		}
-	});
 }
 
 function displayDetails(sortedKeys, jsonData) {
@@ -198,8 +180,7 @@ function initMap(latLookup, lngLookup) {
 		center: myLatLng
 	}
 
-	var styleArray = [
-	{
+	var styleArray = [{
 		featureType: "all",
 		elementType: "labels",
 		stylers: [
@@ -211,8 +192,7 @@ function initMap(latLookup, lngLookup) {
 		stylers: [
 		{ visibility: "on" }
 		]
-	}
-	]
+	}];
 	var map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
 	map.setOptions({styles: styleArray});
@@ -256,8 +236,10 @@ $('#geoLookup').on('click', function() {
 		'street_name': $('#streetNames').val(),
 		'incident_address': $('#addresses option:selected').text()
 	}
+	var lookup = "incidents";
 	
-	incidentLookup(data);
+	$('#map, #details').empty();
+	fetchData(data, lookup);
 });
 
 $('#complaintType').on('change', function() {
@@ -268,6 +250,8 @@ $('#complaintType').on('change', function() {
 		'incident_address': $('#addresses option:selected').text(),
 		'complaint_type': $('#complaintType').val()
 	}
-	
-	incidentLookup(data);
+	var lookup = "incidents";
+
+	$('#map, #details').empty();
+	fetchData(data, lookup);
 });
