@@ -221,10 +221,10 @@ $('#streetNames').on('change', function(){
 
 $('#geoLookup').on('click', function() {
 	var data = {
-		'$$app_token': 'sKRqN6YI4Yd3g612t1P8PhqLt',
-		'incident_zip': $('#zip').val(),
-		'street_name': $('#streetNames').val(),
-		'incident_address': $('#addresses option:selected').text()
+		$$app_token: 'sKRqN6YI4Yd3g612t1P8PhqLt',
+		incident_zip: $('#zip').val(),
+		street_name: $('#streetNames').val(),
+		incident_address: $('#addresses option:selected').text()
 	}
 	
 	fetchData(data).then(function(result) {
@@ -240,11 +240,11 @@ $('#geoLookup').on('click', function() {
 
 $('#complaintType').on('change', function() {
 	var data = {
-		'$$app_token': 'sKRqN6YI4Yd3g612t1P8PhqLt',
-		'incident_zip': $('#zip').val(),
-		'street_name': $('#streetNames').val(),
-		'incident_address': $('#addresses option:selected').text(),
-		'complaint_type': $('#complaintType').val()
+		$$app_token: 'sKRqN6YI4Yd3g612t1P8PhqLt',
+		incident_zip: $('#zip').val(),
+		street_name: $('#streetNames').val(),
+		incident_address: $('#addresses option:selected').text(),
+		complaint_type: $('#complaintType').val()
 	}
 
 	fetchData(data).then(function(result) {
@@ -257,3 +257,18 @@ $('#complaintType').on('change', function() {
 		console.log(error)
 	});
 });
+
+$('#test').on('click', function() {
+	var data = {$$app_token: "sKRqN6YI4Yd3g612t1P8PhqLt", incident_zip: "11105", street_name: "19 STREET", incident_address: "20-23 19 STREET"};
+
+	fetchData(data).then(function(result) {
+		console.log(result)
+		var latLookup = result[0]['location']['latitude'];
+		var lngLookup = result[0]['location']['longitude'];
+
+		displayMap(latLookup, lngLookup);
+		displayDetails(sortData(result), result);
+	}, function(error) {
+		console.log(error)
+	});
+})
