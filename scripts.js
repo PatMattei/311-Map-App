@@ -1,5 +1,6 @@
 //Data: https://nycopendata.socrata.com/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9
 //API docs: http://dev.socrata.com/foundry/#/data.cityofnewyork.us/erm2-nwe9
+//Reference URL: https://data.cityofnewyork.us/resource/erm2-nwe9.json?%24%24app_token=sKRqN6YI4Yd3g612t1P8PhqLt&incident_zip=11105&incident_address=21-67+33+STREET
 
 
 //TODOS
@@ -24,33 +25,24 @@ function geoLookup(lookup) {
 	if (lookup == "address") {
 		data['street_name'] = $('#streetNames option:selected').text();
 	}
-	fetchData(data, lookup);
+
+	fetchData(data).then(function(result) {
+		if (lookup == "streetName") {
+			console.log(result)
+			streetNameLookup(result);
+		} else if (lookup == "address") {
+			addressLookup(result);
+		}
+	}, function(error) {
+		console.log(error)
+	});
 }
 
-function fetchData(data, lookup) {
-	$.ajax({
+function fetchData(data) {
+	return $.ajax({
 		type: 'GET',
-		//Refrence: https://data.cityofnewyork.us/resource/erm2-nwe9.json?%24%24app_token=sKRqN6YI4Yd3g612t1P8PhqLt&incident_zip=11105&incident_address=21-67+33+STREET
 		url: "https://data.cityofnewyork.us/resource/erm2-nwe9.json?$where=(created_date>'2011-01-01')",
-		data: data,
-		success: function(jsonData) {
-			if (lookup == "incidents") {
-				var latLookup = jsonData[0]['location']['latitude'];
-				var lngLookup = jsonData[0]['location']['longitude'];
-				displayMap();
-				initMap(latLookup, lngLookup);
-
-				var sortedKeys = sortData(jsonData);
-				displayDetails(sortedKeys, jsonData);
-			} else if (lookup == "streetName") {
-				streetNameLookup(jsonData);
-			} else if (lookup == "address") {
-				addressLookup(jsonData);
-			}
-		},
-		error: function() {
-			alert('Error loading');
-		}
+		data: data
 	});
 }
 
@@ -207,9 +199,11 @@ function initMap(latLookup, lngLookup) {
 	marker.setMap(map);
 }
 
-function displayMap() {
+function displayMap(latLookup, lngLookup) {
+	$('#map, #details').empty();
 	$('#map').css('height', '500px');
 	$('#map').show();
+	initMap(latLookup, lngLookup);
 }
 
 $(document).ready(resetForm);
@@ -238,8 +232,15 @@ $('#geoLookup').on('click', function() {
 	}
 	var lookup = "incidents";
 	
-	$('#map, #details').empty();
-	fetchData(data, lookup);
+	fetchData(data).then(function(result) {
+		var latLookup = result[0]['location']['latitude'];
+		var lngLookup = result[0]['location']['longitude'];
+
+		displayMap(latLookup, lngLookup);
+		displayDetails(sortData(result), result);
+	}, function(error) {
+		console.log(error)
+	});
 });
 
 $('#complaintType').on('change', function() {
@@ -252,6 +253,13 @@ $('#complaintType').on('change', function() {
 	}
 	var lookup = "incidents";
 
-	$('#map, #details').empty();
-	fetchData(data, lookup);
+	fetchData(data).then(function(result) {
+		var latLookup = result[0]['location']['latitude'];
+		var lngLookup = result[0]['location']['longitude'];
+
+		displayMap(latLookup, lngLookup);
+		displayDetails(sortData(result), result);
+	}, function(error) {
+		console.log(error)
+	});
 });
