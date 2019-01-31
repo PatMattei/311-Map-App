@@ -4,8 +4,7 @@
 
 
 //TODOS
-//Set up test button
-//Fix complaint type bug 
+//Fix complaint type bug
 //Add container elements to details
 //Convert times
 function resetForm() {
