@@ -73,11 +73,7 @@ function addressLookup(jsonData) {
 
 
 
-function incidentLookup() {
-	var zip = $('#zip').val();
-	var streetName = $('#streetNames').val();
-	var address = $('#addresses option:selected').text();
-
+function incidentLookup(data) {
 	$('#map').empty();
 	$('#details').empty();
 
@@ -85,12 +81,7 @@ function incidentLookup() {
 		type: 'GET',
 		//Refrence: https://data.cityofnewyork.us/resource/erm2-nwe9.json?%24%24app_token=sKRqN6YI4Yd3g612t1P8PhqLt&incident_zip=11105&incident_address=21-67+33+STREET
 		url: 'https://data.cityofnewyork.us/resource/erm2-nwe9.json',
-		data: {
-			'$$app_token': 'sKRqN6YI4Yd3g612t1P8PhqLt',
-			'incident_zip': zip,
-			'street_name': streetName,
-			'incident_address': address
-		},
+		data: data,
 		success: function(jsonData) {
 			var latLookup = jsonData[0]['location']['latitude'];
 			var lngLookup = jsonData[0]['location']['longitude'];
@@ -105,24 +96,6 @@ function incidentLookup() {
 		}
 	});
 }
-
-function filterByComplaintTypes(data) {
-	$('#details').empty();
-
-	$.ajax({
-		type: 'GET',
-		url: 'https://data.cityofnewyork.us/resource/erm2-nwe9.json',
-		data: data,
-		success: function(jsonData) {
-			var sortedKeys = sortData(jsonData);
-			displayDetails(sortedKeys, jsonData);
-		},
-		error: function() {
-			alert('Error loading');
-		}
-	});
-}
-
 
 function displayDetails(sortedKeys, jsonData) {
 	var complaintTypes = [];
@@ -276,7 +249,16 @@ $('#streetNames').on('change', function(){
 	geoLookup("address");
 });
 
-$('#geoLookup').on('click', incidentLookup);
+$('#geoLookup').on('click', function() {
+	var data = {
+		'$$app_token': 'sKRqN6YI4Yd3g612t1P8PhqLt',
+		'incident_zip': $('#zip').val(),
+		'street_name': $('#streetNames').val(),
+		'incident_address': $('#addresses option:selected').text()
+	}
+	
+	incidentLookup(data);
+});
 
 $('#complaintType').on('change', function() {
 	var data = {
@@ -286,6 +268,6 @@ $('#complaintType').on('change', function() {
 		'incident_address': $('#addresses option:selected').text(),
 		'complaint_type': $('#complaintType').val()
 	}
-
-	filterByComplaintTypes(data)
+	
+	incidentLookup(data);
 });
