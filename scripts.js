@@ -4,13 +4,14 @@
 
 
 //TODOS
+//Add Show All to complaint-types dropdown
 //Add container elements to details
 //Convert times
 function resetForm() {
 	$('select').empty();
 	$('#streetNames').prepend("<option value=''>Street</option>");
 	$('#addresses').prepend("<option value=''>Address</option>");
-	$('#complaintType').prepend("<option value=''>Filter by Complaint Type</option>");
+	$('#complaintType').prepend('<option value="All">Show All</option>');
 }
 
 function geoLookup(lookup) {
@@ -74,9 +75,9 @@ function displayDetails(jsonData) {
 	$('#details').empty();
 
 	$.each(jsonData, function(i) {
-			var incident = jsonData[i];
-			populateResults(incident['incident_address'], incident['agency_name'], new Date(incident['created_date']), new Date(incident['closed_date']), incident['complaint_type'], incident['descriptor'], incident['unique_key'], incident['resolution_description']);
-			complaintTypes.push(incident['complaint_type'])
+		var incident = jsonData[i];
+		populateResults(incident['incident_address'], incident['agency_name'], new Date(incident['created_date']), new Date(incident['closed_date']), incident['complaint_type'], incident['descriptor'], incident['unique_key'], incident['resolution_description']);
+		complaintTypes.push(incident['complaint_type'])
 	});
 
 	populateComplaintTypes(complaintTypes);
@@ -98,11 +99,9 @@ function populateComplaintTypes(complaintTypes) {
 		$("#complaintType").append("<option value='" + complaintTypes[i] + "'>" + complaintTypes[i] + "</option>");
 	});
 
+	$('#complaintType').prepend('<option value="All">Show All</option>');
 	removeDropdownDuplicates($('#complaintType'));
-	$('#complaintType').prepend('<option value="All">Show All</option>')
 	$("#complaintType").show();
-
-
 }
 
 function sortDataByDate(jsonData) {
@@ -219,7 +218,7 @@ $('#geoLookup').on('click', function() {
 	fetchData(data).then(function(result) {
 		displayMap(result[0]['location']['latitude'], result[0]['location']['longitude']);
 		$('#complaintType').empty();
-		$('#complaintType').prepend("<option value=''>Filter by Complaint Type</option>");
+		$('#complaintType').prepend('<option value="All">Show All</option>');
 		displayDetails(result);
 	}, function(error) {
 		console.log(error)
@@ -235,8 +234,9 @@ $('#complaintType').on('change', function() {
 		complaint_type: $('#complaintType').val()
 	};
 
-	if ($(this).attr('value') == 'All') {
-		delete data[complaint_type];
+	if ($("#complaintType option:selected").val() == 'All') {
+		console.log('deleting')
+		delete data.complaint_type;
 	}
 
 	fetchData(data).then(function(result) {
@@ -261,7 +261,7 @@ $('#test').on('click', function() {
 	fetchData(data).then(function(result) {
 		displayMap(result[0]['location']['latitude'], result[0]['location']['longitude']);
 		$('#complaintType').empty();
-		$('#complaintType').prepend("<option value=''>Filter by Complaint Type</option>");
+		$('#complaintType').prepend('<option value="All">Show All</option>');
 		displayDetails(result);
 	}, function(error) {
 		console.log(error)
