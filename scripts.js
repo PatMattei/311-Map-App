@@ -4,8 +4,11 @@
 
 
 //TODOS
-//Add container elements to details
+//Add loading notification
+//Add disabled states
 //Convert times
+//Add look-up by clicking on map?
+
 function emptyDropdowns() {
 	$('select').empty();
 	$('#streetNames').prepend("<option value=''>Street</option>");
@@ -75,23 +78,39 @@ function displayDetails(jsonData) {
 
 	$.each(jsonData, function(i) {
 		var incident = jsonData[i];
-		populateResults(incident['incident_address'], incident['agency_name'], new Date(incident['created_date']), new Date(incident['closed_date']), incident['complaint_type'], incident['descriptor'], incident['unique_key'], incident['resolution_description']);
+		var details = {
+			incident_address: incident['incident_address'],
+			agency_name: incident['agency_name'],
+			created_date: new Date(incident['created_date']),
+			closed_date: new Date(incident['closed_date']),
+			complaint_type: incident['complaint_type'],
+			descriptor: incident['descriptor'],
+			unique_key: incident['unique_key'],
+			resolution_description: incident['resolution_description']
+		}
+
+		populateResults(details);
 		complaintTypes.push(incident['complaint_type'])
 	});
 
 	populateComplaintTypes(complaintTypes);
 }
 
-function populateResults(incident_address, agency_name, created_date, closed_date, complaint_type, descriptor, unique_key, resolution_description) {
-	$("#details").append("<div class='incident'></div>")
-	$('.incident').last().append("incident_address: " + incident_address + ",<br>");
-	$('.incident').last().append("agency_name: " + agency_name + ",<br>");
-	$('.incident').last().append("created_date: " + created_date + ",<br>");
-	$('.incident').last().append("descriptor: " + descriptor + "<br>");
-	$('.incident').last().append("closed_date: " + closed_date + ",<br>");
-	$('.incident').last().append("resolution_description: " + resolution_description + ",<br>");
-	$('.incident').last().append("complaint_type: " + complaint_type + ",<br>");
-	$('.incident').last().append("unique_key: " + unique_key + "<hr>");
+function populateResults(details) {
+	var incident = $("<div />", {
+		"class": "incident",
+	});
+	$("#details").append(incident);
+	var element = incident;
+	var arr = [];
+
+	$.each(details, function(key, value) {
+		arr.push(key);
+		arr.push(": ");
+		arr.push(value);
+		arr.push("<br>");
+	});
+	incident.append(arr.join(''));
 }
 
 function populateComplaintTypes(complaintTypes) {
@@ -214,7 +233,7 @@ $('#geoLookup').on('click', function() {
 		street_name: $('#streetNames').val(),
 		incident_address: $('#addresses option:selected').text()
 	};
-	
+
 	fetchData(data).then(function(result) {
 		displayMap(result[0]['location']['latitude'], result[0]['location']['longitude']);
 		$('#complaintType').empty();

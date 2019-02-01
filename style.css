@@ -10,3 +10,7 @@
 #complaintType {
 	display: block;
 }
+
+.incident {
+	border-bottom: 2px solid #000;
+}
