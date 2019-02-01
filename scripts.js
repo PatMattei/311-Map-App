@@ -4,10 +4,9 @@
 
 
 //TODOS
-//Add Show All to complaint-types dropdown
 //Add container elements to details
 //Convert times
-function resetForm() {
+function emptyDropdowns() {
 	$('select').empty();
 	$('#streetNames').prepend("<option value=''>Street</option>");
 	$('#addresses').prepend("<option value=''>Address</option>");
@@ -84,14 +83,15 @@ function displayDetails(jsonData) {
 }
 
 function populateResults(incident_address, agency_name, created_date, closed_date, complaint_type, descriptor, unique_key, resolution_description) {
-	$("#details").append("incident_address: " + incident_address + ",<br>");
-	$("#details").append("agency_name: " + agency_name + ",<br>");
-	$("#details").append("created_date: " + created_date + ",<br>");
-	$("#details").append("descriptor: " + descriptor + "<br>");
-	$("#details").append("closed_date: " + closed_date + ",<br>");
-	$("#details").append("resolution_description: " + resolution_description + ",<br>");
-	$("#details").append("complaint_type: " + complaint_type + ",<br>");
-	$("#details").append("unique_key: " + unique_key + "<hr>");
+	$("#details").append("<div class='incident'></div>")
+	$('.incident').last().append("incident_address: " + incident_address + ",<br>");
+	$('.incident').last().append("agency_name: " + agency_name + ",<br>");
+	$('.incident').last().append("created_date: " + created_date + ",<br>");
+	$('.incident').last().append("descriptor: " + descriptor + "<br>");
+	$('.incident').last().append("closed_date: " + closed_date + ",<br>");
+	$('.incident').last().append("resolution_description: " + resolution_description + ",<br>");
+	$('.incident').last().append("complaint_type: " + complaint_type + ",<br>");
+	$('.incident').last().append("unique_key: " + unique_key + "<hr>");
 }
 
 function populateComplaintTypes(complaintTypes) {
@@ -191,7 +191,7 @@ function displayMap(latLookup, lngLookup) {
 }
 
 
-$(document).ready(resetForm);
+$(document).ready(emptyDropdowns);
 
 
 $("#zip").on('keyup', function() {
@@ -199,7 +199,7 @@ $("#zip").on('keyup', function() {
 		geoLookup("streetName");
 	}
 	else {
-		resetForm();
+		emptyDropdowns();
 	}
 });
 
@@ -246,6 +246,9 @@ $('#complaintType').on('change', function() {
 	});
 });
 
+
+
+//TESTING BUTTON
 $('#test').on('click', function() {
 	$('#zip').val("11105");
 	$('#streetNames option:selected').val("19 STREET");
