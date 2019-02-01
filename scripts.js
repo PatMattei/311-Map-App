@@ -11,7 +11,7 @@ function resetForm() {
 	$('select').empty();
 	$('#streetNames').prepend("<option value=''>Street</option>");
 	$('#addresses').prepend("<option value=''>Address</option>");
-	$('#complaintType').prepend("<option value=''>Complaint Types</option>");
+	$('#complaintType').prepend("<option value=''>Filter by Complaint Type</option>");
 }
 
 function geoLookup(lookup) {
@@ -26,6 +26,7 @@ function geoLookup(lookup) {
 	}
 
 	fetchData(data).then(function(result) {
+		console.log("results:", result)
 		if (lookup == "streetName") {
 			console.log(result)
 			streetNameLookup(result);
@@ -55,7 +56,7 @@ function streetNameLookup(jsonData) {
 			$("#streetNames").append("<option>" + incident['address_type'] + "</option>");
 		}
 	});
-	removeDuplicates('streetNames');
+	removeDropdownDuplicates($('#streetNames'));
 	sortDropdown('streetNames', 'Street');
 }
 
@@ -66,7 +67,7 @@ function addressLookup(jsonData) {
 		var incident = jsonData[x];
 		$("#addresses").append("<option value='" + incident['incident_address'] + "'>" + incident['incident_address'] + "</option>");
 	});
-	removeDuplicates('addresses');
+	removeDropdownDuplicates($('#addresses'));
 	sortDropdown('addresses', 'Address');
 }
 
@@ -105,7 +106,10 @@ function populateComplaintTypes(complaintTypes) {
 		console.log(complaintTypes[i])
 		$("#complaintType").append("<option value='" + complaintTypes[i] + "'>" + complaintTypes[i] + "</option>");
 	});
+
+	removeDropdownDuplicates($('#complaintType'));
 	$("#complaintType").show();
+
 }
 
 function sortData(jsonData) {
@@ -123,11 +127,11 @@ function compareDates(a, b) {
 	return new Date(a.date).getTime() - new Date(b.date).getTime();
 }
 
-function removeDuplicates(field) {
-	var dropdown = "#" + field;
+function removeDropdownDuplicates(field) {
+	var dropdown = field;
 	var usedNames = {};
 
-	$(dropdown + " > option").each(function () {
+	dropdown.children("option").each(function () {
 		if (usedNames[this.text]) {
 			$(this).remove();
 		} else {
@@ -224,13 +228,14 @@ $('#geoLookup').on('click', function() {
 		incident_zip: $('#zip').val(),
 		street_name: $('#streetNames').val(),
 		incident_address: $('#addresses option:selected').text()
-	}
+	};
+
+	console.log("data: ",data);
 	
 	fetchData(data).then(function(result) {
-		var latLookup = result[0]['location']['latitude'];
-		var lngLookup = result[0]['location']['longitude'];
-
-		displayMap(latLookup, lngLookup);
+		displayMap(result[0]['location']['latitude'], result[0]['location']['longitude']);
+		$('#complaintType').empty();
+		$('#complaintType').prepend("<option value=''>Filter by Complaint Type</option>");
 		displayDetails(sortData(result), result);
 	}, function(error) {
 		console.log(error)
@@ -244,13 +249,12 @@ $('#complaintType').on('change', function() {
 		street_name: $('#streetNames').val(),
 		incident_address: $('#addresses option:selected').text(),
 		complaint_type: $('#complaintType').val()
-	}
+	};
+
+	console.log("data: ",data);
 
 	fetchData(data).then(function(result) {
-		var latLookup = result[0]['location']['latitude'];
-		var lngLookup = result[0]['location']['longitude'];
-
-		displayMap(latLookup, lngLookup);
+		displayMap(result[0]['location']['latitude'], result[0]['location']['longitude']);
 		displayDetails(sortData(result), result);
 	}, function(error) {
 		console.log(error)
@@ -258,14 +262,24 @@ $('#complaintType').on('change', function() {
 });
 
 $('#test').on('click', function() {
-	var data = {$$app_token: "sKRqN6YI4Yd3g612t1P8PhqLt", incident_zip: "11105", street_name: "19 STREET", incident_address: "20-23 19 STREET"};
+	$('#zip').val("11105");
+	$('#streetNames option:selected').val("19 STREET");
+	$('#addresses option:selected').text("20-23 19 STREET");
+
+	var data = {
+		$$app_token: 'sKRqN6YI4Yd3g612t1P8PhqLt',
+		incident_zip: $('#zip').val(),
+		street_name: $('#streetNames').val(),
+		incident_address: $('#addresses option:selected').text()
+	};
+
+	console.log("data: ",data);
 
 	fetchData(data).then(function(result) {
-		console.log(result)
-		var latLookup = result[0]['location']['latitude'];
-		var lngLookup = result[0]['location']['longitude'];
-
-		displayMap(latLookup, lngLookup);
+		console.log("results:", result)
+		displayMap(result[0]['location']['latitude'], result[0]['location']['longitude']);
+		$('#complaintType').empty();
+		$('#complaintType').prepend("<option value=''>Filter by Complaint Type</option>");
 		displayDetails(sortData(result), result);
 	}, function(error) {
 		console.log(error)
