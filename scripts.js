@@ -4,7 +4,6 @@
 
 
 //TODOS
-//Fix complaint type bug
 //Add container elements to details
 //Convert times
 function resetForm() {
@@ -26,9 +25,7 @@ function geoLookup(lookup) {
 	}
 
 	fetchData(data).then(function(result) {
-		console.log("results:", result)
 		if (lookup == "streetName") {
-			console.log(result)
 			streetNameLookup(result);
 		} else if (lookup == "address") {
 			addressLookup(result);
@@ -47,8 +44,8 @@ function fetchData(data) {
 }
 
 function streetNameLookup(jsonData) {
-	$.each(jsonData, function(x) {
-		var incident = jsonData[x];
+	$.each(jsonData, function(i) {
+		var incident = jsonData[i];
 		if (incident['address_type'] == 'ADDRESS') {
 			$("#streetNames").append("<option value='" + incident['street_name'] + "'>" + incident['street_name'] + "</option>");
 		}
@@ -63,30 +60,25 @@ function streetNameLookup(jsonData) {
 function addressLookup(jsonData) {
 	$('#addresses').empty();
 	$('#addresses').prepend("<option value=''>Address</option>");
-	$.each(jsonData, function(x) {
-		var incident = jsonData[x];
+	$.each(jsonData, function(i) {
+		var incident = jsonData[i];
 		$("#addresses").append("<option value='" + incident['incident_address'] + "'>" + incident['incident_address'] + "</option>");
 	});
 	removeDropdownDuplicates($('#addresses'));
 	sortDropdown('addresses', 'Address');
 }
 
-function displayDetails(sortedKeys, jsonData) {
+function displayDetails(jsonData) {
 	var complaintTypes = [];
 
-	$.each(sortedKeys, function(i) {
-		var sortedKey = sortedKeys[i]['id'];
-		$.each(jsonData, function(x) {
-			if (jsonData[x]['unique_key'] == sortedKey) {
-				var incident = jsonData[x];
-				populateResults(incident['incident_address'], incident['agency_name'], new Date(incident['created_date']), new Date(incident['closed_date']), incident['complaint_type'], incident['descriptor'], incident['unique_key'], incident['resolution_description']);
+	$('#details').empty();
 
-				if (jQuery.inArray(incident['complaint_type'], complaintTypes) === -1 ) {
-					complaintTypes.push(incident['complaint_type']);
-				}
-			}
-		});
+	$.each(jsonData, function(i) {
+			var incident = jsonData[i];
+			populateResults(incident['incident_address'], incident['agency_name'], new Date(incident['created_date']), new Date(incident['closed_date']), incident['complaint_type'], incident['descriptor'], incident['unique_key'], incident['resolution_description']);
+			complaintTypes.push(incident['complaint_type'])
 	});
+
 	populateComplaintTypes(complaintTypes);
 }
 
@@ -103,35 +95,29 @@ function populateResults(incident_address, agency_name, created_date, closed_dat
 
 function populateComplaintTypes(complaintTypes) {
 	$.each(complaintTypes, function(i) {
-		console.log(complaintTypes[i])
 		$("#complaintType").append("<option value='" + complaintTypes[i] + "'>" + complaintTypes[i] + "</option>");
 	});
 
 	removeDropdownDuplicates($('#complaintType'));
+	$('#complaintType').prepend('<option value="All">Show All</option>')
 	$("#complaintType").show();
+
 
 }
 
-function sortData(jsonData) {
-	unsortedData = [];
-	$.each(jsonData, function(i) {
-		var sortedKey = jsonData[i];
-		unsortedData.push({"id": sortedKey['unique_key'], "date": new Date(sortedKey['created_date'])});
-	});
-	var sortedData = unsortedData.sort(compareDates);
-	//Return newest create_date data first
+function sortDataByDate(jsonData) {
+	var sortedData = jsonData.sort(compareDates);
 	return sortedData.reverse();
 }
 
 function compareDates(a, b) {
-	return new Date(a.date).getTime() - new Date(b.date).getTime();
+	return new Date(a.created_date).getTime() - new Date(b.created_date).getTime();
 }
 
 function removeDropdownDuplicates(field) {
-	var dropdown = field;
 	var usedNames = {};
 
-	dropdown.children("option").each(function () {
+	field.children("option").each(function () {
 		if (usedNames[this.text]) {
 			$(this).remove();
 		} else {
@@ -229,14 +215,12 @@ $('#geoLookup').on('click', function() {
 		street_name: $('#streetNames').val(),
 		incident_address: $('#addresses option:selected').text()
 	};
-
-	console.log("data: ",data);
 	
 	fetchData(data).then(function(result) {
 		displayMap(result[0]['location']['latitude'], result[0]['location']['longitude']);
 		$('#complaintType').empty();
 		$('#complaintType').prepend("<option value=''>Filter by Complaint Type</option>");
-		displayDetails(sortData(result), result);
+		displayDetails(result);
 	}, function(error) {
 		console.log(error)
 	});
@@ -251,11 +235,12 @@ $('#complaintType').on('change', function() {
 		complaint_type: $('#complaintType').val()
 	};
 
-	console.log("data: ",data);
+	if ($(this).attr('value') == 'All') {
+		delete data[complaint_type];
+	}
 
 	fetchData(data).then(function(result) {
-		displayMap(result[0]['location']['latitude'], result[0]['location']['longitude']);
-		displayDetails(sortData(result), result);
+		displayDetails(result);
 	}, function(error) {
 		console.log(error)
 	});
@@ -273,14 +258,11 @@ $('#test').on('click', function() {
 		incident_address: $('#addresses option:selected').text()
 	};
 
-	console.log("data: ",data);
-
 	fetchData(data).then(function(result) {
-		console.log("results:", result)
 		displayMap(result[0]['location']['latitude'], result[0]['location']['longitude']);
 		$('#complaintType').empty();
 		$('#complaintType').prepend("<option value=''>Filter by Complaint Type</option>");
-		displayDetails(sortData(result), result);
+		displayDetails(result);
 	}, function(error) {
 		console.log(error)
 	});
