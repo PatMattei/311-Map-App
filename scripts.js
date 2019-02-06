@@ -204,8 +204,7 @@ function initMap(latLookup, lngLookup) {
 
 function displayMap(latLookup, lngLookup) {
 	$('#map, #details').empty();
-	$('#map').css('height', '500px');
-	$('#map').show();
+	$('#map').addClass('active');
 	initMap(latLookup, lngLookup);
 }
 
@@ -254,7 +253,6 @@ $('#complaintType').on('change', function() {
 	};
 
 	if ($("#complaintType option:selected").val() == 'All') {
-		console.log('deleting')
 		delete data.complaint_type;
 	}
 
