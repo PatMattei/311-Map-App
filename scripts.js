@@ -120,6 +120,7 @@ function populateComplaintTypes(complaintTypes) {
 
 	$('#complaintType').prepend('<option value="All">Show All</option>');
 	removeDropdownDuplicates($('#complaintType'));
+	
 	$("#complaintType").show();
 }
 
@@ -204,8 +205,7 @@ function initMap(latLookup, lngLookup) {
 
 function displayMap(latLookup, lngLookup) {
 	$('#map, #details').empty();
-	$('#map').css('height', '500px');
-	$('#map').show();
+	$('#map').addClass('active');
 	initMap(latLookup, lngLookup);
 }
 
@@ -226,7 +226,7 @@ $('#streetNames').on('change', function(){
 	geoLookup("address");
 });
 
-$('#geoLookup').on('click', function() {
+$('#addresses').on('change', function() {
 	var data = {
 		$$app_token: 'sKRqN6YI4Yd3g612t1P8PhqLt',
 		incident_zip: $('#zip').val(),
@@ -254,7 +254,6 @@ $('#complaintType').on('change', function() {
 	};
 
 	if ($("#complaintType option:selected").val() == 'All') {
-		console.log('deleting')
 		delete data.complaint_type;
 	}
 
@@ -264,28 +263,3 @@ $('#complaintType').on('change', function() {
 		console.log(error)
 	});
 });
-
-
-
-//TESTING BUTTON
-$('#test').on('click', function() {
-	$('#zip').val("11105");
-	$('#streetNames option:selected').val("19 STREET");
-	$('#addresses option:selected').text("20-23 19 STREET");
-
-	var data = {
-		$$app_token: 'sKRqN6YI4Yd3g612t1P8PhqLt',
-		incident_zip: $('#zip').val(),
-		street_name: $('#streetNames').val(),
-		incident_address: $('#addresses option:selected').text()
-	};
-
-	fetchData(data).then(function(result) {
-		displayMap(result[0]['location']['latitude'], result[0]['location']['longitude']);
-		$('#complaintType').empty();
-		$('#complaintType').prepend('<option value="All">Show All</option>');
-		displayDetails(result);
-	}, function(error) {
-		console.log(error)
-	});
-})

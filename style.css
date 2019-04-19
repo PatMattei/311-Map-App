@@ -5,7 +5,12 @@
 }
 
 #map {
+	display: none;
+}
+
+#map.active {
 	display: block;
+	height: 500px;
 }
 #complaintType {
 	display: block;
@@ -13,4 +18,5 @@
 
 .incident {
 	border-bottom: 2px solid #000;
+	margin: 20px 0;
 }
