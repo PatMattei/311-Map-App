@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html>
 <head>
 	<meta charset="UTF-8">
 	<title>311 Map App</title>
@@ -15,17 +14,20 @@
 			<h1>311 Map App</h1>
 		</div>
 		<div id="about">
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum quis erat eu dolor blandit ultricies. Sed accumsan placerat convallis. Nulla at metus ullamcorper, semper orci vitae, laoreet massa. Fusce ac diam quis lorem fringilla euismod. Praesent vel euismod lacus. Suspendisse scelerisque, nisl ut imperdiet condimentum, massa nisl ullamcorper urna, in tincidunt dolor felis vel orci. Sed leo massa, malesuada eget consectetur ac, accumsan sit amet eros. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Duis elementum laoreet semper. Phasellus auctor vulputate dui, in posuere justo pellentesque ac. Vestibulum mattis id nulla ac aliquet. Pellentesque libero nunc, cursus id tempor at, aliquam at dui. Mauris commodo, diam non tempus semper, lectus nisi tincidunt nibh, quis pellentesque neque diam vel dolor. Sed accumsan elit et nisl molestie lacinia. Proin sollicitudin commodo nulla sed varius. Duis maximus rhoncus purus ac laoreet.</p>
-			<p>In felis augue, accumsan quis egestas a, vulputate ut neque. Donec varius orci at arcu vulputate posuere viverra quis ante. Aenean finibus magna in dolor varius aliquet. Mauris sit amet enim et lacus eleifend auctor a sit amet ante. Aliquam ultricies ipsum sit amet turpis vestibulum auctor. Etiam mollis risus ut mauris commodo commodo. In viverra sit amet lectus nec lacinia. Mauris scelerisque ultrices dui, quis vestibulum ligula. Donec non ultrices elit. Vestibulum vitae tincidunt risus, a pulvinar diam. Sed finibus, risus in feugiat fringilla, urna odio aliquet risus, ut dignissim velit ante pretium ligula.</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum quis erat eu dolor blandit ultricies. Sed accumsan placerat convallis. Nulla at metus ullamcorper, semper orci vitae, laoreet massa. Fusce ac diam quis lorem fringilla euismod. Praesent vel euismod lacus. Suspendisse scelerisque, nisl ut imperdiet condimentum, massa nisl ullamcorper urna, in tincidunt dolor felis vel orci.</p>
+			<p>In felis augue, accumsan quis egestas a, vulputate ut neque. Donec varius orci at arcu vulputate posuere viverra quis ante. Aenean finibus magna in dolor varius aliquet. Mauris sit amet enim et lacus eleifend auctor a sit amet ante. Aliquam ultricies ipsum sit amet turpis vestibulum auctor.</p>
 		</div>
 	</div>
-	<input type="text" id="zip" maxlength="5" placeholder="Zip Code">
-	<select id="streetNames"></select>
-	<select id="addresses"></select>
+	<div class="address-info">
+		<input type="text" id="zip" maxlength="5" placeholder="Zip Code">
+		<select id="streetNames"></select>
+		<select id="addresses"></select>
 
-	<div id="map"></div>
-	<div id="filter">
-		<p>Filter Incidents by Complaint Type: <select id="complaintType"></select></p>
+		<div id="map"></div>
+		<div id="filter">
+			<p>Filter Incidents by Complaint Type: <select id="complaintType"></select></p>
+		</div>
+
 	</div>
 	<div id="details"></div>
 
