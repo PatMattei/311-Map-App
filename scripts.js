@@ -9,11 +9,14 @@
 //Convert times
 //Add look-up by clicking on map?
 
+
+
 function emptyDropdowns() {
 	$('select').empty();
 	$('#streetNames').prepend("<option value=''>Street</option>");
 	$('#addresses').prepend("<option value=''>Address</option>");
 	$('#complaintType').prepend('<option value="All">Show All</option>');
+	disableEnableDropdowns();
 }
 
 function geoLookup(lookup) {
@@ -142,6 +145,8 @@ function removeDropdownDuplicates(field) {
 			usedNames[this.text] = this.value;
 		}
 	});
+
+	disableEnableDropdowns();
 }
 
 function sortDropdown(field, display) {
@@ -208,8 +213,22 @@ function displayMap(latLookup, lngLookup) {
 	initMap(latLookup, lngLookup);
 }
 
+function disableEnableDropdowns() {
+	$("select").each(function() {
+		var length = $(this).children('option').length;
 
-$(document).ready(emptyDropdowns);
+		if ( length < 2 ) {
+			$(this).prop('disabled',true);
+		} else {
+			$(this).prop('disabled',false);
+		}
+	});
+}
+
+
+$(document).ready(function() {
+	emptyDropdowns();
+});
 
 
 $("#zip").on('keyup', function() {
