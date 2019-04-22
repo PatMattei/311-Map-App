@@ -5,11 +5,8 @@
 
 //TODOS
 //Add loading notification
-//Add disabled states
 //Convert times
 //Add look-up by clicking on map?
-
-
 
 function emptyDropdowns() {
 	$('select').empty();
@@ -78,6 +75,7 @@ function displayDetails(jsonData) {
 	var complaintTypes = [];
 
 	$('#details').empty();
+	jsonData = sortDataByDate(jsonData);
 
 	$.each(jsonData, function(i) {
 		var incident = jsonData[i];
