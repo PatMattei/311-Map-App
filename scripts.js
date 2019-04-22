@@ -228,6 +228,7 @@ function disableEnableDropdowns() {
 
 
 $(document).ready(function() {
+	$('#zip').val("");
 	emptyDropdowns();
 });
 
