@@ -80,14 +80,14 @@ function displayDetails(jsonData) {
 	$.each(jsonData, function(i) {
 		var incident = jsonData[i];
 		var details = {
-			incident_address: incident['incident_address'],
+			complaint_type: incident['complaint_type'],
+			descriptor: incident['descriptor'],
 			agency_name: incident['agency_name'],
 			created_date: new Date(incident['created_date']),
 			closed_date: new Date(incident['closed_date']),
-			complaint_type: incident['complaint_type'],
-			descriptor: incident['descriptor'],
-			unique_key: incident['unique_key'],
-			resolution_description: incident['resolution_description']
+			resolution_description: incident['resolution_description'],
+			incident_address: incident['incident_address'],
+			unique_key: incident['unique_key']
 		}
 
 		populateResults(details);
@@ -106,7 +106,15 @@ function populateResults(details) {
 	var arr = [];
 
 	$.each(details, function(key, value) {
-		arr.push(key);
+		function toTitleCase(key) { //convert the detail labels to title case
+			key = key.replace(/_/g, ' '); //remove spaces
+		    return key.replace(/(?:^|\s)\w/g, function(match) {
+		        return match.toUpperCase();
+		    });
+		}
+
+		key = toTitleCase(key);
+		arr.push("<span class='label'>" + key + "</span>");
 		arr.push(": ");
 		arr.push(value);
 		arr.push("<br>");
