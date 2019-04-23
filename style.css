@@ -1,8 +1,16 @@
-body {
+.container {
 	background-color: #FEF151;
-	font-size: 16px;
-	font-family: sans-serif;
 }
+
+input,
+select {
+	border-radius: 4px;
+	background-color: #fff;
+	color: #000;
+	width:100%;
+}
+
+input
 
 .header {
 	display: flex;
@@ -17,10 +25,15 @@ body {
 
 #title h1 {
 	white-space: nowrap;
+	margin: 0;
+	border-bottom: 2px solid #000;
 }
 
 #about {
 	flex: 5 0 80%;
+}
+
+#about p {
 }
 #details {
 	height: 500px;
@@ -32,6 +45,7 @@ body {
 	color: #fff;
 	margin: 10px 0;
 	padding: 10px;
+
 }
 
 #map {

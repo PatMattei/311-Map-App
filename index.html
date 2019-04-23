@@ -7,27 +7,32 @@
 
 	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCn2Ht9My5Ps3LJRclNtm-ATeY_zD57nSE"></script>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
 </head>
 <body>
-	<div class="header">
-		<div id="title">
-			<h1>311 Look&#8209;Up</h1>
-		</div>
-		<div id="about">
-			<p><strong>About The App:</strong> This page lets you look up the 311 reports for any  New York City address.<br>Just enter the zip code, street name, and address of the building you'd like to see a 311 report on.</p>
+	<div class="container">
+		<div class="header">
+			<div id="title">
+				<h1>311 Look&#8209;Up</h1>
+			</div>
+			<div id="about">
+				<p><strong>About The App:</strong> This page lets you look up the 311 reports for any  New York City address.<br>Just enter the zip code, street name, and address of the building you'd like to see a 311 report on.</p>
 
+			</div>
 		</div>
-	</div>
-	<div class="address-info">
-		<input type="text" id="zip" maxlength="5" placeholder="Zip Code">
-		<select id="streetNames"></select>
-		<select id="addresses"></select>
+		<div class="address-info">
+			<input type="text" id="zip" maxlength="5" placeholder="Zip Code">
+			<select id="streetNames"></select>
+			<select id="addresses"></select>
 
-		<div id="filter">
-			<p>Filter Incidents by Complaint Type: <select id="complaintType"></select></p>
+			<div id="filter">
+				<p>Filter Incidents by Complaint Type: <select id="complaintType"></select></p>
+			</div>
+			<div id="details"></div>
+			<div id="map"></div>
 		</div>
-		<div id="details"></div>
-		<div id="map"></div>
 	</div>
 
 	<script src="scripts.js" type="text/javascript"></script>
