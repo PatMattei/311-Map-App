@@ -241,9 +241,11 @@ $(document).ready(function() {
 
 $("#zip").on('keyup', function() {
 	if ($('#zip').val().length == 5) {
+		emptyDropdowns();
 		geoLookup("streetName");
 	}
 	else {
+		$('#details').empty();
 		emptyDropdowns();
 	}
 });
