@@ -1,3 +1,9 @@
+body {
+	background-color: #FEF151;
+	font-size: 16px;
+	font-family: sans-serif;
+}
+
 .header {
 	display: flex;
 	justify-content: start;
@@ -21,10 +27,11 @@
 	overflow: auto;
 }
 
-.address-info{
+.address-info {
+	background-color: #000;
+	color: #fff;
 	margin: 10px 0;
 	padding: 10px;
-	background-color: gray;
 }
 
 #map {
