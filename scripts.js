@@ -35,15 +35,19 @@ function geoLookup(lookup) {
 			addressLookup(result);
 		}
 	}, function(error) {
-		console.log(error)
+		console.log(error);
 	});
 }
 
 function fetchData(data) {
+	$('.spinner-border').show();
 	return $.ajax({
 		type: 'GET',
 		url: "https://data.cityofnewyork.us/resource/erm2-nwe9.json?$where=(created_date>'2011-01-01')",
-		data: data
+		data: data,
+		success: function (response) {
+			$(".spinner-border").hide();
+		},
 	});
 }
 
@@ -109,9 +113,9 @@ function populateResults(details) {
 	$.each(details, function(key, value) {
 		function toTitleCase(key) { //convert the detail labels to title case
 			key = key.replace(/_/g, ' '); //remove spaces
-		    return key.replace(/(?:^|\s)\w/g, function(match) {
-		        return match.toUpperCase();
-		    });
+			return key.replace(/(?:^|\s)\w/g, function(match) {
+				return match.toUpperCase();
+			});
 		}
 
 		key = toTitleCase(key);
@@ -235,6 +239,7 @@ function disableEnableDropdowns() {
 
 
 $(document).ready(function() {
+	$('.spinner-border').hide();
 	$('#zip').val("");
 	emptyDropdowns();
 });

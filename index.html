@@ -19,7 +19,6 @@
 			</div>
 			<div id="about">
 				<p><strong>About The App:</strong> This page lets you look up the 311 reports for any  New York City address.<br>Just enter the zip code, street name, and address of the building you'd like to see a 311 report on.</p>
-
 			</div>
 		</div>
 		<div class="address-info">
@@ -30,7 +29,14 @@
 			<div id="filter">
 				<p>Filter Incidents by Complaint Type: <select id="complaintType"></select></p>
 			</div>
-			<div id="details"></div>
+
+			<div class="spinner-border" role="status">
+				<span class="sr-only">Loading...</span>
+			</div>
+
+			<div id="details">
+				
+			</div>
 			<div id="map"></div>
 		</div>
 	</div>
