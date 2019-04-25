@@ -5,7 +5,8 @@
 
 //TODOS
 //Add loading notification
-//Convert times
+//Convert times from military
+//clean up date/time lines
 //Add look-up by clicking on map?
 
 function emptyDropdowns() {
