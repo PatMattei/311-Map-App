@@ -4,9 +4,7 @@
 
 
 //TODOS
-//Add loading notification
 //Convert times from military
-//clean up date/time lines
 //Add look-up by clicking on map?
 
 function emptyDropdowns() {
@@ -93,7 +91,7 @@ function displayDetails(jsonData) {
 			resolution_description: incident['resolution_description'],
 			incident_address: incident['incident_address'],
 			unique_key: incident['unique_key']
-		}
+		};
 
 		populateResults(details);
 		complaintTypes.push(incident['complaint_type'])
@@ -113,6 +111,7 @@ function populateResults(details) {
 	$.each(details, function(key, value) {
 		function toTitleCase(key) { //convert the detail labels to title case
 			key = key.replace(/_/g, ' '); //remove spaces
+			value = value.toString().replace("GMT-0400 (Eastern Daylight Time)", "(Eastern Daylight Time)") //format date
 			return key.replace(/(?:^|\s)\w/g, function(match) {
 				return match.toUpperCase();
 			});
@@ -236,6 +235,7 @@ function disableEnableDropdowns() {
 		}
 	});
 }
+
 
 
 $(document).ready(function() {
