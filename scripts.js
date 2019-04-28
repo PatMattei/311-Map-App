@@ -17,8 +17,8 @@ function emptyDropdowns() {
 
 function geoLookup(lookup) {
 	var zip = $('#zip').val();
-	
 	var data = {};
+	
 	data['$$app_token'] = 'sKRqN6YI4Yd3g612t1P8PhqLt';
 	data['incident_zip'] = zip;
 
@@ -111,7 +111,14 @@ function populateResults(details) {
 	$.each(details, function(key, value) {
 		function toTitleCase(key) { //convert the detail labels to title case
 			key = key.replace(/_/g, ' '); //remove spaces
-			value = value.toString().replace("GMT-0400 (Eastern Daylight Time)", "(Eastern Daylight Time)") //format date
+
+			var my_string = $('a#my_link').text().replace(/[0-9]+/, 'replacement');
+
+			if (key == 'created date' || key == 'closed date' ) {//format time 
+				value = value.toString().replace("GMT-0400", "");
+				value = value.toString().replace("GMT-0500", "");
+				value = moment(value).format('dddd, MMMM Do YYYY, h:mm a');
+			}
 			return key.replace(/(?:^|\s)\w/g, function(match) {
 				return match.toUpperCase();
 			});
@@ -155,9 +162,9 @@ function removeDropdownDuplicates(field) {
 		} else {
 			usedNames[this.text] = this.value;
 		}
-	});
 
-	disableEnableDropdowns();
+		disableEnableDropdowns();
+	});
 }
 
 function sortDropdown(field, display) {
