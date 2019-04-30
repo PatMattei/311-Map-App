@@ -1,5 +1,8 @@
+select { background-color: #fff; }
+
 .container-fluid {
 	background-color: #FEF151;
+	font-size: 3rem;
 }
 
 .header {
@@ -52,6 +55,7 @@
 }
 
 .incident {
+	font-size: .8em;
 	border-bottom: 2px solid #000;
 	margin: 20px 0;
 }
@@ -59,3 +63,19 @@
 .label {
 	font-weight: bold;
 }
+
+/*Small devices (landscape phones, 576px and up)*/
+@media only screen and (min-width: 576px) {}
+ 
+/*Medium devices (tablets, 768px and up)*/
+@media only screen and (min-width: 768px) {
+	.container-fluid {
+		font-size: 2rem;
+	}
+}
+ 
+/*Large devices (desktops, 992px and up)*/
+@media only screen and (min-width: 992px) {}
+ 
+/*Extra large devices (large desktops, 1200px and up)*/
+@media only screen and (min-width: 1200px) {}
