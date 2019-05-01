@@ -1,18 +1,18 @@
-select { background-color: #fff; }
+form *{
+	width: 100%;
+	display: block;
+}
+
+select {
+	background-color: #fff;
+}
 
 .container-fluid {
 	background-color: #FEF151;
-	font-size: 3rem;
-}
-
-.header {
-	display: flex;
-	justify-content: start;
-	flex-wrap: wrap;
+	font-size: 2rem;
 }
 
 #title {
-	flex: 1 0 auto;
 	margin-right: 5%;
 }
 
@@ -22,12 +22,11 @@ select { background-color: #fff; }
 	border-bottom: 2px solid #000;
 }
 
-#about {
-	flex: 5 0 80%;
+
+#filter p {
+	display: inline-block;
 }
 
-#about p {
-}
 #details {
 	height: 500px;
 	overflow: auto;
@@ -41,13 +40,10 @@ select { background-color: #fff; }
 
 }
 
-#map {
-	display: none;
-}
-
 #map.active {
 	display: block;
 	height: 250px;
+	width: 100%;
 }
 
 #complaintType {
@@ -66,16 +62,16 @@ select { background-color: #fff; }
 
 /*Small devices (landscape phones, 576px and up)*/
 @media only screen and (min-width: 576px) {}
- 
+
 /*Medium devices (tablets, 768px and up)*/
 @media only screen and (min-width: 768px) {
 	.container-fluid {
 		font-size: 2rem;
 	}
 }
- 
+
 /*Large devices (desktops, 992px and up)*/
 @media only screen and (min-width: 992px) {}
- 
+
 /*Extra large devices (large desktops, 1200px and up)*/
 @media only screen and (min-width: 1200px) {}

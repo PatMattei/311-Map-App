@@ -221,6 +221,7 @@ function initMap(latLookup, lngLookup) {
 }
 
 function displayMap(latLookup, lngLookup) {
+	console.log(lngLookup)
 	$('#map, #details').empty();
 	$('#map').addClass('active');
 	initMap(latLookup, lngLookup);
@@ -241,6 +242,7 @@ function disableEnableDropdowns() {
 
 
 $(document).ready(function() {
+	initMap(-73.9087608571301, 40.776053006093605)
 	$('.spinner-border').hide();
 	$('#zip').val("");
 	emptyDropdowns();

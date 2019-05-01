@@ -13,21 +13,29 @@
 </head>
 <body>
 	<div class="container-fluid">
-		<div class="header">
-			<div id="title">
-				<h1>311 Look&#8209;Up</h1>
-			</div>
-			<div id="about">
-				<p><strong>About The App:</strong> This page lets you look up the 311 reports for any  New York City address.<br>Just enter the zip code, street name, and address of the building you'd like to see a 311 report on.</p>
+		<div class="row">
+			<div class="header col-9">
+				<div id="title">
+					<h1>311 Look&#8209;Up</h1>
+				</div>
+				<div id="about">
+					<p><strong>About The App:</strong> This page lets you look up the 311 reports for any  New York City address.<br>Just enter the zip code, street name, and address of the building you'd like to see a 311 report on.</p>
+				</div>
 			</div>
 		</div>
+
 		<div class="address-info">
-			<input type="text" id="zip" maxlength="5" placeholder="Zip Code">
-			<select id="streetNames"></select>
-			<select id="addresses"></select>
+			<div class="row">
+				<form class="col-3">
+					<input type="text" id="zip" maxlength="5" placeholder="Zip Code">
+					<select id="streetNames"></select>
+					<select id="addresses"></select>
+				</form>
+				<div id="map" class="active col-9"></div>
+			</div>
 
 			<div id="filter">
-				<p>Filter Incidents by Complaint Type: <select id="complaintType"></select></p>
+				<p>Filter Incidents By: <select id="complaintType"></select></p>
 			</div>
 
 			<div class="spinner-border" role="status">
@@ -37,7 +45,6 @@
 			<div id="details">
 				
 			</div>
-			<div id="map"></div>
 		</div>
 	</div>
 
