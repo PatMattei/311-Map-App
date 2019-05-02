@@ -10,12 +10,10 @@ select {
 .container-fluid {
 	background-color: #FEF151;
 	font-size: 2rem;
-	padding: 10px;
 }
 
 #title h1 {
 	white-space: nowrap;
-	margin: 0;
 	border-bottom: 2px solid #000;
 }
 
@@ -31,13 +29,12 @@ select {
 .address-info {
 	background-color: #000;
 	color: #fff;
-	padding: 10px;
 }
 
 #map.active {
 	display: block;
 	height: 250px;
-	background-color: green; /*plceholder for loading map at launch*/
+	background-color: green; /*placeholder for loading map at launch*/
 }
 
 
