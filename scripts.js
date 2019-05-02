@@ -242,7 +242,7 @@ function disableEnableDropdowns() {
 
 
 $(document).ready(function() {
-	initMap(-73.9087608571301, 40.776053006093605)
+	initMap(40.776053006093605, -73.9087608571301);
 	$('.spinner-border').hide();
 	$('#zip').val("");
 	emptyDropdowns();
