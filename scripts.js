@@ -1,6 +1,5 @@
 //Data: https://nycopendata.socrata.com/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9
 //API docs: http://dev.socrata.com/foundry/#/data.cityofnewyork.us/erm2-nwe9
-//Reference URL: https://data.cityofnewyork.us/resource/erm2-nwe9.json?%24%24app_token=sKRqN6YI4Yd3g612t1P8PhqLt&incident_zip=11105&incident_address=21-67+33+STREET
 
 function emptyDropdowns() {
 	$('select').empty();
@@ -258,7 +257,7 @@ $("#zip").on('keyup', function() {
 	}
 });
 
-$('#streetNames').on('change', function(){
+$('#streetNames').on('change', function() {
 	geoLookup("address");
 });
 
