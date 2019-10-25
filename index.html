@@ -23,13 +23,13 @@
 
 </head>
 <body>
-	<div class="container-fluid">
+	<div id="main-content" class="container-fluid">
 		<div class="header">
 			<div id="title">
 				<h1>311 Look&#8209;Up</h1>
 			</div>
 			<div id="about">
-				<p><strong>About The App:</strong> This page lets you look up the 311 reports for any  New York City address.<br>Just enter the zip code, street name, and address of the building you'd like to see a 311 report on.</p>
+				<p><strong>About This App:</strong> This page lets you look up the 311 reports for any  New York City address.<br>Enter the zip code, street name, and address of the building you'd like to see a 311 report on.</p>
 			</div>
 		</div>
 		<div class="address-info">
@@ -45,12 +45,16 @@
 				<span class="sr-only">Loading...</span>
 			</div>
 
-			<div id="details">
-				
-			</div>
+			<div id="details"></div>
+			
 			<div id="map"></div>
 		</div>
 	</div>
+	<div id="footer" class="container-fluid">
+		<p>Site created by <a href="https://patrickmattei.com/">Patrick Lines-Mattei</a></p>
+		<p>Map data provided by <a href="https://nycopendata.socrata.com/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9">NYC Open Data</a></p>
+	</div>
+
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 	<script src="scripts.js" type="text/javascript"></script>
